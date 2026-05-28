@@ -87,3 +87,20 @@ export async function fetchInvoicesPages(query) {
   const totalPages = Math.ceil(Number(data[0].count) / 6);
   return totalPages;
 }
+
+export async function fetchInvoiceById(id) {
+  const data = await sql`
+    SELECT
+      invoices.id,
+      invoices.customer_id,
+      invoices.amount,
+      invoices.status
+    FROM invoices
+    WHERE invoices.id = ${id};
+  `;
+  const invoice = data.map((invoice) => ({
+    ...invoice,
+    amount: invoice.amount / 100,
+  }));
+  return invoice[0];
+}
