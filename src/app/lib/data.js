@@ -47,3 +47,43 @@ export async function fetchCustomers() {
   return data;
 }
 
+export async function fetchFilteredInvoices(query, currentPage) {
+  const offset = (currentPage - 1) * 6;
+  const data = await sql`
+    SELECT
+      invoices.id,
+      invoices.amount,
+      invoices.date::text,
+      invoices.status,
+      customers.name,
+      customers.email,
+      customers.image_url
+    FROM invoices
+    JOIN customers ON invoices.customer_id = customers.id
+    WHERE
+      customers.name ILIKE ${`%${query}%`} OR
+      customers.email ILIKE ${`%${query}%`} OR
+      invoices.amount::text ILIKE ${`%${query}%`} OR
+      invoices.date::text ILIKE ${`%${query}%`} OR
+      invoices.status ILIKE ${`%${query}%`}
+    ORDER BY invoices.date DESC
+    LIMIT 6 OFFSET ${offset}
+  `;
+  return data;
+}
+
+export async function fetchInvoicesPages(query) {
+  const data = await sql`
+    SELECT COUNT(*)
+    FROM invoices
+    JOIN customers ON invoices.customer_id = customers.id
+    WHERE
+      customers.name ILIKE ${`%${query}%`} OR
+      customers.email ILIKE ${`%${query}%`} OR
+      invoices.amount::text ILIKE ${`%${query}%`} OR
+      invoices.date::text ILIKE ${`%${query}%`} OR
+      invoices.status ILIKE ${`%${query}%`}
+  `;
+  const totalPages = Math.ceil(Number(data[0].count) / 6);
+  return totalPages;
+}
