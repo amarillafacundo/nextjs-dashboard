@@ -7,6 +7,8 @@ import { Suspense } from 'react';
 import { InvoicesTableSkeleton } from '../../ui/skeletons';
 import { fetchInvoicesPages } from '../../lib/data';
 
+export const metadata = { title: 'Invoices' };
+
 export default async function Page({ searchParams }) {
   const params = await searchParams;
   const query = params?.query || '';

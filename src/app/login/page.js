@@ -1,6 +1,8 @@
 import LoginForm from '../ui/login-form';
 import { Suspense } from 'react';
 
+export const metadata = { title: 'Login' };
+
 export default function LoginPage() {
   return (
     <main className="flex items-center justify-center md:h-screen">

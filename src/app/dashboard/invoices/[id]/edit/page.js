@@ -3,6 +3,8 @@ import Breadcrumbs from '../../../../ui/invoices/breadcrumbs';
 import { fetchInvoiceById, fetchCustomers } from '../../../../lib/data';
 import { notFound } from 'next/navigation';
 
+export const metadata = { title: 'Edit Invoice' };
+
 export default async function Page({ params }) {
   const id = (await params).id;
   const [invoice, customers] = await Promise.all([
